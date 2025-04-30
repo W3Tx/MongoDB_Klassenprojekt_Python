@@ -8,12 +8,40 @@ collection = None
 def main(): 
     # Schreib hier weiter 
     print("Verbingung zu MongoDB")
-    list_databases()
-    select_or_create_database()
-    list_collection()
-    select_or_create_collection()
-    insert_document()
-    display_documents()
+    
+    running = True
+
+    while running:
+        print("\n=== MongoDB Flexibles Menü ===")
+        print("[1] Datenbanken anzeigen")
+        print("[2] Datenbank auswählen oder erstellen")
+        print("[3] Collections anzeigen")
+        print("[4] Collection auswählen oder erstellen")
+        print("[5] Dokumente einfügen")
+        print("[6] Dokumente anzeigen")
+        print("[7] Einzelnes Dokument löschen")
+        print("[0] Beenden")
+
+        input_choice = input("\nAuswahl: ").strip()
+
+        if input_choice == "1":
+            list_databases()
+        elif input_choice == "2":
+            select_or_create_database()
+        elif input_choice == "3":
+            list_collection()
+        elif input_choice == "4":
+            select_or_create_collection()
+        elif input_choice == "5":
+            insert_document()
+        elif input_choice == "6":
+            display_documents()
+        elif input_choice == "7":
+            delete_single_document()
+        elif input_choice == "0":
+            running = False
+        else:
+            print("Ungültige Eingabe")
 
 
 def list_databases():
@@ -76,6 +104,20 @@ def  display_documents():
     print("\nAlle Dokumente:")
     for doc in document: 
         print(doc)
+
+def delete_single_document():
+    if collection is None:
+        print("Bitte zuerst eine Collection aus ")
+        return
+    
+    name = input("\nGeben Sie den Namen des zu löschenden Dokuments ein: ").strip()
+    result = collection.delete_one({"Name": name})
+
+    if result.deleted_count > 0:
+        print(f"Dokument '{name}' erfolgreich gelöscht")
+    else:
+        print(f"Dokument '{name}' nicht gefunden")
+
 
 # Startpunkt
 if __name__ == "__main__":
